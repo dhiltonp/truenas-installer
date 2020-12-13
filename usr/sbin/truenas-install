@@ -139,12 +139,15 @@ get_raid_present()
 get_physical_disks_list()
 {
     local _disk
-    local _nvmedisk
 
     VAL=""
 
-    for _nvmedisk in $(ls /dev/nvme* | grep -oP '(?<=/dev/nvme).*.n.(?!p)' | sort -t: -u | sed 's/^/nvme/'); do
-        VAL="${VAL} ${_nvmedisk}"
+    for _disk in $(ls /dev/nvme* | grep -oP '(?<=/dev/nvme).*.n.(?!p)' | sort -t: -u | sed 's/^/nvme/'); do
+        VAL="${VAL} ${_disk}"
+    done
+    
+    for _disk in $(ls /dev/mmc* | grep -oP '(?<=/dev/mmc).*.n.(?!p)' | sort -t: -u | sed 's/^/mmc/'); do
+        VAL="${VAL} ${_disk}"
     done
 
     for _disk in $(ls /dev/sd* /dev/vd* /dev/hd* /dev/xvd* /dev/nvme* /dev/mmc* 2>/dev/null | grep -v '[0-9]' | sed 's|/dev/||g')
